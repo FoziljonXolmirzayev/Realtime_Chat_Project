@@ -5,14 +5,14 @@ const { comparePassword } = require("../services/bcrypt");
 
 module.exports.signUp = async (req, res) => {
   try {
-    const foundUser = await Users.findOne({ name: req.body.userName });
+    const foundUser = await Users.findOne({ name: req.body.username });
     console.log(req.body);
     if (foundUser) {
       res.status(401).send("this userName already exist! Choose another one!");
       return;
     }
     const createdUser = await Users.create({
-      name: req.body.userName,
+      name: req.body.username,
       password: req.body.password,
     });
     const token = generateToken({ uid: createdUser._id });
