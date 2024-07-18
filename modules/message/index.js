@@ -1,3 +1,4 @@
+const { JsonWebTokenError } = require("jsonwebtoken");
 const { decodeToken } = require("../../services/jwt");
 const Message = require("./model");
 
@@ -7,6 +8,7 @@ module.exports.createMessage = async (req, res) => {
     const userId = decodeToken(token).uid;
     const createdMessage = await Message.create({
       message: req.body.message,
+      chatId: req.body.chatId,
       sendedBy: userId,
     });
 
@@ -15,22 +17,7 @@ module.exports.createMessage = async (req, res) => {
     throw new Error(error);
   }
 };
-module.exports.getMessages = async (req, res) => {
-  try {
-    const allMessages = await Message.find({}).populate("sendedBy");
-    res.send(allMessages);
-  } catch (error) {
-    throw new Error(error);
-  }
-};
-module.exports.getMessage = async (req, res) => {
-  try {
-    const foundMessage = await Message.findById(req.params.id);
-    res.send(foundMessage);
-  } catch (error) {
-    throw new Error(error);
-  }
-};
+
 module.exports.deleteMessage = async (req, res) => {
   try {
     const deletedMessage = await Message.findByIdAndDelete(req.params.id);
@@ -49,5 +36,13 @@ module.exports.updateMessage = async (req, res) => {
     res.send(updatedMessage);
   } catch (error) {
     throw new Error();
+  }
+};
+module.exports.getMessagesByChatId = async (req, res) => {
+  try {
+    const foundChat = await Message.find({ chatId: req.query.chatId });
+    res.send(foundChat);
+  } catch (error) {
+    throw new Error(error);
   }
 };

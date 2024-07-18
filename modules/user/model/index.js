@@ -6,6 +6,12 @@ const userSchema = new Schema({
   password: String,
 });
 
+userSchema.methods.toJSON = function () {
+  const object = this.toObject();
+  delete object.password;
+  return object;
+};
+
 userSchema.pre("save", async function () {
   this.password = await hashPassword(this.password);
 });

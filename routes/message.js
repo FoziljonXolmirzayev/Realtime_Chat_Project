@@ -1,16 +1,14 @@
 const express = require("express");
 const {
   createMessage,
-  getMessages,
-  getMessage,
   deleteMessage,
   updateMessage,
+  getMessagesByChatId,
 } = require("../modules/message");
 const messageRoute = express.Router();
 
 messageRoute.post("/create", createMessage);
-messageRoute.get("/", getMessages);
-messageRoute.get("/:id", getMessage);
+messageRoute.get("/", getMessagesByChatId);
 messageRoute.delete("/delete/:id", deleteMessage);
 messageRoute.put("/update/:id", updateMessage);
 
